@@ -19,7 +19,6 @@ void verificarErrorEntrada(int argc, char **argv)
     int ver3 = strcmp(argv[5], "-s") != 0;
     int ver4 = strcmp(argv[7], "-t") != 0;
     int ver5 = strcmp(argv[9], "-p") != 0;
-
     printf("%d %d %d %d %d", ver1, ver2, ver3, ver4, ver5);
     */
 
@@ -172,7 +171,7 @@ int main(int argc, char **argv)
     reserva reservas[tam][totalpersonas];
     int numPersonas[tam];
     int numReservas[tam];
-    for (int i = 0; i <= tam; i++)
+    for (int i = 0; i < tam; i++)
     {
         numPersonas[i] = 0;
         numReservas[i] = 0;
@@ -307,31 +306,44 @@ int main(int argc, char **argv)
     write(fdReceptorAgente, "Finalizó el proceso de reservas para el agente", TAMMENSAJE);
 
     //TODO EL PROCESO DE ARRIBA ES SOLO PARA UN AGENTE (ADAPTAR PARA VARIOS)
-
+    
+   int horasPico[12],horasMasDesocupadas[12];
+    int j,k=0;
     int max = 0, imax;
     int min = totalpersonas, imin;
     printf("\n");
-    for (int i = 0; i <= tam; i++)
+    for (int i = 0; i < tam; i++)
     {
         printf("Hora: %d, Número de Personas reservadas: %d\n", horaInicio + i, numPersonas[i]);
-        if (numPersonas[i] > max)
+        if (numPersonas[i] >= max)
         {
             max = numPersonas[i];
-            imax = i;
+           
+            if(i!=0){
+                horasPico[j] = horaInicio+i;
+                j++;
+            }
         }
 
-        if (numPersonas[i] < min)
+        if (numPersonas[i] <= min)
         {
             min = numPersonas[i];
-            imin = i;
+             horasMasDesocupadas[k] = horaInicio+i;
+            k++;
         }
     }
 
     //TODO
     //no mostrar solo una hora pico y una hora menos sino todas las pico y todas las menores
-    printf("\nHora pico: %d\n", horaInicio + imax);
-    printf("Hora con menor número personas: %d\n", horaInicio + imin);
-    printf("Número solicitudes negadas: %d\n", numSolicitudesNegadas);
+    printf("\nHoras pico: ");
+    for(int l=0; l<j;l++){
+      printf(" %d ", horasPico[l]);
+    }
+    printf("\nHoras con menor numero de personas: ");
+    for(int m=0; m<k;m++){
+      printf(" %d ", horasMasDesocupadas[m]);
+    }
+    printf("\nNúmero solicitudes negadas: %d\n", numSolicitudesNegadas);
     printf("Número solicitudes aceptadas en su hora: %d\n", numSolicitudesAceptadas);
     printf("Número solicitudes reprogramadas: %d\n", numSolicitudesReprogramadas);
 
